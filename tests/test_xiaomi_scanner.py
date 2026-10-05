@@ -18,9 +18,11 @@ spec.loader.exec_module(module)
 
 class ScannerTests(unittest.TestCase):
     def test_candidate_matching(self):
-        self.assertTrue(module.is_candidate("Xiaomi Band 11", "AA:BB"))
+        self.assertTrue(module.is_candidate("Xiaomi Smart Band 11", "AA:BB"))
         self.assertTrue(module.is_candidate("Redmi Watch 5", "CC:DD"))
-        self.assertFalse(module.is_candidate("Bluetooth Speaker", "EE:FF"))
+        self.assertTrue(module.is_candidate("Mi Band", "EE:FF"))
+        self.assertFalse(module.is_candidate("Bluetooth Speaker", "11:22"))
+        self.assertFalse(module.is_candidate("Generic Smart Watch", "33:44"))
 
     def test_sort_matches(self):
         matches = [
