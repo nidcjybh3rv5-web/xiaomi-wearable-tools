@@ -2,6 +2,30 @@
 
 小米穿戴裝置通用工具專案，目標支援多種 Xiaomi Watch、Xiaomi Band、Redmi Watch 與其他相關穿戴裝置。
 
+## Xiaomi Band 支援範圍
+
+第一階段以 **Xiaomi Smart Band 7～11** 為主要支援系列：
+
+| 系列 | 型號 |
+|---|---|
+| Xiaomi Smart Band | Band 7 |
+| Xiaomi Smart Band | Band 8 |
+| Xiaomi Smart Band | Band 9 |
+| Xiaomi Smart Band | Band 10 |
+| Xiaomi Smart Band | Band 11 |
+
+同時保留後續加入 **Band 7 NFC、Band 8 NFC、Band 9 NFC、Band 11 Active** 等衍生型號的空間。
+
+> 「支援」目前代表納入型號資料庫、BLE 辨識與診斷架構；不同型號可用的 GATT 服務會依韌體、地區版本與配對狀態而不同，不會假設所有型號都有相同服務。
+
+## 其他裝置
+
+架構也預留給：
+
+- Xiaomi Watch 系列
+- Redmi Watch 系列
+- 其他 Xiaomi / Redmi BLE 穿戴裝置
+
 ## v0.1.0
 
 目前第一階段提供 Windows 本機 BLE 診斷工具：
@@ -44,6 +68,11 @@ xiaomi-wearable-tools/
 │     └─ README.md
 ├─ devices/
 │  ├─ band/
+│  │  ├─ band7/
+│  │  ├─ band8/
+│  │  ├─ band9/
+│  │  ├─ band10/
+│  │  └─ band11/
 │  └─ watch/
 ├─ tests/
 │  ├─ test_xiaomi_scanner.py
@@ -56,11 +85,13 @@ xiaomi-wearable-tools/
 
 ## 後續規劃
 
-1. 建立 Xiaomi / Redmi 型號資料庫
-2. Band 9 / Band 11 型號辨識
-3. Watch / Redmi Watch 型號辨識
-4. GATT 結果標準化
-5. 更完整的 Windows 診斷介面
+1. 建立 Band 7～11 型號資料庫
+2. 加入各代 Band 的 BLE 廣播辨識
+3. 加入 Band 7～11 的 GATT 差異資料
+4. 加入 NFC / Active 等衍生型號
+5. 加入 Xiaomi Watch / Redmi Watch 型號資料
+6. GATT 結果標準化
+7. 更完整的 Windows 診斷介面
 
 ## 安全範圍
 
