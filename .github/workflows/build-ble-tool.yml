@@ -1,0 +1,47 @@
+name: Build Xiaomi Wearable BLE Tool
+
+on:
+  push:
+    paths:
+      - "tools/ble/**"
+      - "tests/**"
+      - ".github/workflows/build-ble-tool.yml"
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: windows-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: py -m pip install -r tools/ble/requirements.txt
+
+      - name: Validate Python syntax
+        run: py -m py_compile tools/ble/xiaomi_scanner.py tests/test_xiaomi_scanner.py
+
+      - name: Run unit tests
+        run: py -m unittest discover -s tests -p "test_*.py" -v
+
+      - name: Package tool
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path dist/xiaomi-wearable-ble-tool | Out-Null
+          Copy-Item tools/ble/* dist/xiaomi-wearable-ble-tool/ -Recurse
+          Compress-Archive -Path dist/xiaomi-wearable-ble-tool -DestinationPath dist/Xiaomi-Wearable-BLE-Tool-v0.1.0.zip -Force
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Xiaomi-Wearable-BLE-Tool-v0.1.0
+          path: dist/Xiaomi-Wearable-BLE-Tool-v0.1.0.zip
+          if-no-files-found: error
