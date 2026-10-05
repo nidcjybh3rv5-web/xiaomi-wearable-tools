@@ -6,13 +6,22 @@ from pathlib import Path
 from bleak import BleakClient, BleakScanner
 
 OUTPUT = Path(__file__).resolve().parent / "scan_result.json"
-KEYWORDS = ("xiaomi", "mi band", "redmi", "miband", "watch", "band")
+KEYWORDS = (
+    "xiaomi",
+    "mi band",
+    "miband",
+    "redmi",
+)
 MAX_SCAN_SECONDS = 10.0
 CONNECT_TIMEOUT_SECONDS = 15.0
 
 
 def is_candidate(name: str, address: str) -> bool:
-    """Return True for likely Xiaomi/Redmi wearable advertisements."""
+    """Return True for likely Xiaomi/Redmi advertisements.
+
+    Do not match generic words such as only "watch" or "band", because
+    those names are also common on unrelated Bluetooth devices.
+    """
     blob = f"{name} {address}".casefold()
     return any(keyword in blob for keyword in KEYWORDS)
 
@@ -43,6 +52,7 @@ async def discover_devices() -> list[dict]:
     for device, advertisement in discovered.values():
         name = (advertisement.local_name or device.name or "").strip()
         address = str(device.address)
+
         if not is_candidate(name, address):
             continue
 
@@ -119,7 +129,7 @@ async def main() -> None:
         print(f"Saved: {OUTPUT}")
         return
 
-    print(f"Found {len(result['matches'])} possible wearable device(s).")
+    print(f"Found {len(result['matches'])} possible Xiaomi/Redmi device(s).")
     for index, item in enumerate(result["matches"], 1):
         print(
             f"[{index}] {item['name'] or '(no name)'} | "
